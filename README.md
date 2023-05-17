@@ -1,6 +1,5 @@
 # MyEcommerce
 
-This app was created with Bootify.io - tips on working with the code [can be found here](https://bootify.io/next-steps/). Feel free to contact us for further questions.
 
 ## Development
 
@@ -8,7 +7,7 @@ During development it is recommended to use the profile `local`. In IntelliJ, `-
 
 Update your local database connection in `application.properties` or create your own `application-local.properties` file to override settings for development.
 
-Lombok must be supported by your IDE. For this, in IntelliJ install the Lombok plugin and enable annotation processing - [learn more](https://bootify.io/next-steps/spring-boot-with-lombok.html).
+Lombok must be supported by your IDE. For this, in IntelliJ install the Lombok plugin and enable annotation processing 
 
 After starting the application it is accessible under `localhost:8080`.
 
@@ -32,3 +31,14 @@ java -Dspring.profiles.active=production -jar ./target/my-ecommerce-0.0.1-SNAPSH
 * [Spring Boot reference](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)  
 * [Spring Data JPA reference](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)  
 # E-sell-Backend
+
+
+# Gmsaiful71@gmail.com
+
+* +88 01712922516
+* +88 01511922516
+* gmsifulalam93@gmail.com
+* gmsaiful71@gmail.com
+* linkedin.com/in/saiful93/
+* github.com/SaifulAlam93
+* twitter.com/gmsifulalam93 # Fil-Upload-Using-Spring-boot
