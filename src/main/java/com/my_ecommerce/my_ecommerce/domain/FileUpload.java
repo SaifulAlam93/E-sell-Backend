@@ -10,8 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.OffsetDateTime;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,6 +21,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FileUpload {
 
     @Id
@@ -38,14 +41,14 @@ public class FileUpload {
     private String url;
 
     @Column
-    private String imageNo;
+    private Integer imageNo;
 
     @Column
     private String imageType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "products_id")
-    private Products products;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "products_id")
+//    private Products products;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

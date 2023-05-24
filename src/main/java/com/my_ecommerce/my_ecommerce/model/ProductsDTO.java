@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -36,5 +37,8 @@ public class ProductsDTO {
     private Long productCategory;
 
     private Set<ProductOption> productOptions;
+
+    private List<Long> fileUploads;
+
 
 }

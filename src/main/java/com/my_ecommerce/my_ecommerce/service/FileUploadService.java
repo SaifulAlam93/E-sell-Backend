@@ -60,7 +60,6 @@ public class FileUploadService {
         fileUploadDTO.setUrl(fileUpload.getUrl());
         fileUploadDTO.setImageNo(fileUpload.getImageNo());
         fileUploadDTO.setImageType(fileUpload.getImageType());
-        fileUploadDTO.setProducts(fileUpload.getProducts() == null ? null : fileUpload.getProducts().getId());
         return fileUploadDTO;
     }
 
@@ -70,10 +69,11 @@ public class FileUploadService {
         fileUpload.setUrl(fileUploadDTO.getUrl());
         fileUpload.setImageNo(fileUploadDTO.getImageNo());
         fileUpload.setImageType(fileUploadDTO.getImageType());
-        final Products products = fileUploadDTO.getProducts() == null ? null : productsRepository.findById(fileUploadDTO.getProducts())
-                .orElseThrow(() -> new NotFoundException("products not found"));
-        fileUpload.setProducts(products);
+
         return fileUpload;
     }
+
+
+
 
 }

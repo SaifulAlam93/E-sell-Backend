@@ -21,7 +21,7 @@ public class FileUploadDTO {
     private String url;
 
     @Size(max = 255)
-    private String imageNo;
+    private Integer imageNo;
 
     @Size(max = 255)
     private String imageType;

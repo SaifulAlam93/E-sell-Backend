@@ -1,37 +1,40 @@
 package com.my_ecommerce.my_ecommerce.service;
 
-import com.my_ecommerce.my_ecommerce.domain.ProductCategory;
-import com.my_ecommerce.my_ecommerce.domain.ProductOption;
-import com.my_ecommerce.my_ecommerce.domain.Products;
+import com.my_ecommerce.my_ecommerce.domain.*;
 import com.my_ecommerce.my_ecommerce.model.ProductsDTO;
+import com.my_ecommerce.my_ecommerce.repos.FileUploadRepository;
 import com.my_ecommerce.my_ecommerce.repos.ProductCategoryRepository;
 import com.my_ecommerce.my_ecommerce.repos.ProductOptionRepository;
 import com.my_ecommerce.my_ecommerce.repos.ProductsRepository;
 import com.my_ecommerce.my_ecommerce.util.NotFoundException;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.File;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
 public class ProductsService {
+    private final String FOLDER_PATH="E://img/static/image/";
 
     private final ProductsRepository productsRepository;
     private final ProductCategoryRepository productCategoryRepository;
 
     private final ProductOptionRepository productOptionRepository;
+    private final FileUploadRepository fileUploadRepository;
 
     public ProductsService(final ProductsRepository productsRepository,
                            final ProductCategoryRepository productCategoryRepository,
-                           final  ProductOptionRepository productOptionRepository) {
+                           final  ProductOptionRepository productOptionRepository,
+                           final FileUploadRepository fileUploadRepository) {
         this.productsRepository = productsRepository;
         this.productCategoryRepository = productCategoryRepository;
         this.productOptionRepository = productOptionRepository;
+        this.fileUploadRepository = fileUploadRepository;
     }
 
     public List<ProductsDTO> findAll() {
@@ -96,6 +99,9 @@ public class ProductsService {
         productsDTO.setCurrentStock(products.getCurrentStock());
         productsDTO.setImage(products.getImage());
         productsDTO.setProductCategory(products.getProductCategory() == null ? null : products.getProductCategory().getId());
+        productsDTO.setFileUploads(products.getFileUploads() == null ? null : products.getFileUploads().stream()
+                .map(fileUpload -> fileUpload.getId())
+                .toList());
         return productsDTO;
     }
 
@@ -111,8 +117,64 @@ public class ProductsService {
         final ProductCategory productCategory = productsDTO.getProductCategory() == null ? null : productCategoryRepository.findById(productsDTO.getProductCategory())
                 .orElseThrow(() -> new NotFoundException("productCategory not found"));
         products.setProductCategory(productCategory);
-
+//        final List<FileUpload> fileUploads = fileUploadRepository.findAllById(
+//                productsDTO.getFileUploads() == null ? Collections.emptyList() : productsDTO.getFileUploads());
+//        if (fileUploads.size() != (productsDTO.getFileUploads() == null ? 0 : productsDTO.getFileUploads().size())) {
+//            throw new NotFoundException("one of fileUploads not found");
+//        }
+//        products.setFileUploads(fileUploads.stream().collect(Collectors.toSet()));
         return products;
+    }
+
+
+
+    public Long createWithFile(final ProductsDTO productsDTO, MultipartFile[] file) {
+        final Products products = new Products();
+
+        mapToEntity(productsDTO, products);
+
+
+        Set<FileUpload> fileUploads = new HashSet<>();
+        try {
+            int index = 0;
+            for (MultipartFile mf: file)
+            {
+
+                String filePath = FOLDER_PATH+mf.getOriginalFilename();
+
+                FileUpload fileUpload=fileUploadRepository.save(
+                        FileUpload.builder()
+                                .name(mf.getOriginalFilename())
+                                .type(mf.getContentType())
+                                .imageNo(index++)
+                                .imageType("test")
+                                .url(filePath).build());
+
+                mf.transferTo(new File(filePath));
+                if (fileUpload != null) {
+                    fileUploads.add(fileUpload);
+                }
+            }
+            products.setFileUploads(fileUploads);
+        }catch (Exception e){}
+
+
+
+
+        Long pid = productsRepository.save(products).getId();
+
+
+
+        products.setId(pid);
+        if (productsDTO.getProductOptions()!=null){
+            for (ProductOption p:productsDTO.getProductOptions()
+            ) {
+                p.setProducts(products);
+                productOptionRepository.save(p);
+            }
+        }
+
+        return pid;
     }
 
 }
