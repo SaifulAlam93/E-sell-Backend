@@ -1,6 +1,8 @@
 package com.my_ecommerce.my_ecommerce.service;
 
 import com.my_ecommerce.my_ecommerce.domain.*;
+import com.my_ecommerce.my_ecommerce.model.FileInfo;
+import com.my_ecommerce.my_ecommerce.model.FileUploadDTO;
 import com.my_ecommerce.my_ecommerce.model.ProductsDTO;
 import com.my_ecommerce.my_ecommerce.repos.FileUploadRepository;
 import com.my_ecommerce.my_ecommerce.repos.ProductCategoryRepository;
@@ -9,6 +11,8 @@ import com.my_ecommerce.my_ecommerce.repos.ProductsRepository;
 import com.my_ecommerce.my_ecommerce.util.NotFoundException;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,7 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ProductsService {
-    private final String FOLDER_PATH="E://img/static/image/";
+
+
+//    private final String FOLDER_PATH="E://img/static/image/";
+    private final String FOLDER_PATH="I://my-ecommerce/Angular/my-ecommerce/src/assets/img/uploadedImage/";
 
     private final ProductsRepository productsRepository;
     private final ProductCategoryRepository productCategoryRepository;
@@ -99,9 +106,9 @@ public class ProductsService {
         productsDTO.setCurrentStock(products.getCurrentStock());
         productsDTO.setImage(products.getImage());
         productsDTO.setProductCategory(products.getProductCategory() == null ? null : products.getProductCategory().getId());
-        productsDTO.setFileUploads(products.getFileUploads() == null ? null : products.getFileUploads().stream()
-                .map(fileUpload -> fileUpload.getId())
-                .toList());
+//        productsDTO.setFileUploads(products.getFileUploads() == null ? null : products.getFileUploads().stream()
+//                .map(fileUpload -> fileUpload.getId())
+//                .toList());
         return productsDTO;
     }
 
@@ -130,16 +137,12 @@ public class ProductsService {
 
     public Long createWithFile(final ProductsDTO productsDTO, MultipartFile[] file) {
         final Products products = new Products();
-
         mapToEntity(productsDTO, products);
-
-
         Set<FileUpload> fileUploads = new HashSet<>();
         try {
             int index = 0;
             for (MultipartFile mf: file)
             {
-
                 String filePath = FOLDER_PATH+mf.getOriginalFilename();
 
                 FileUpload fileUpload=fileUploadRepository.save(
@@ -157,13 +160,7 @@ public class ProductsService {
             }
             products.setFileUploads(fileUploads);
         }catch (Exception e){}
-
-
-
-
         Long pid = productsRepository.save(products).getId();
-
-
 
         products.setId(pid);
         if (productsDTO.getProductOptions()!=null){
@@ -173,8 +170,50 @@ public class ProductsService {
                 productOptionRepository.save(p);
             }
         }
-
         return pid;
     }
 
+    public List<ProductsDTO> findAllWithImage() {
+        final List<Products> productss = productsRepository.findAll(Sort.by("id"));
+
+
+        return productss.stream()
+                .map((products) -> {
+
+                    ProductsDTO productsDTO = new ProductsDTO();
+                    Set<ProductOption> productOptions = new HashSet<>();
+                    mapToDTO(products, productsDTO);
+                    productOptions = productOptionRepository.getAllByProductId(products.getId());
+                    productOptions.forEach(productOption -> productOption.setProducts(null));
+                    productsDTO.setProductOptions(productOptions);
+                    Set<FileUploadDTO> fileUploadDTOS = new HashSet<>();
+                    Set<FileUpload> fileUploads = new HashSet<>();
+                    fileUploads = fileUploadRepository.getAllByProductId(products.getId());
+
+                    fileUploads.forEach(fileData -> {
+                        try {
+                            String filePath=fileData.getUrl();
+                            byte[] images = Files.readAllBytes(new File(filePath).toPath());
+                            FileUploadDTO fileUploadDTO = new FileUploadDTO();
+                            mapToDTO(fileData,fileUploadDTO);
+                            fileUploadDTO.setImage(images);
+                            fileUploadDTOS.add(fileUploadDTO);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    productsDTO.setFileUploadList(fileUploadDTOS);
+                    return productsDTO;
+                })
+                .toList();
+    }
+    private FileUploadDTO mapToDTO(final FileUpload fileUpload, final FileUploadDTO fileUploadDTO) {
+        fileUploadDTO.setId(fileUpload.getId());
+        fileUploadDTO.setName(fileUpload.getName());
+        fileUploadDTO.setType(fileUpload.getType());
+        fileUploadDTO.setUrl(fileUpload.getUrl());
+        fileUploadDTO.setImageNo(fileUpload.getImageNo());
+        fileUploadDTO.setImageType(fileUpload.getImageType());
+        return fileUploadDTO;
+    }
 }

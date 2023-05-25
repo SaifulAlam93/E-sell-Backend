@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(value = "/api/productss", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://192.168.191.222:4200", allowCredentials = "true")
 public class ProductsResource {
     @Autowired
     private ProductsService productsService;
@@ -63,17 +64,16 @@ public class ProductsResource {
 
     @PostMapping("/productsWithImage")
     public ResponseEntity<Long> uploadFileAndData(@RequestParam("file") MultipartFile[] file, @ModelAttribute ProductsDTO productsDTO) {
-        // Access the multipart file
-        // ...
-
-        // Access the request body data
-        // ...
         final Long createdId = productsService.createWithFile(productsDTO, file);
-
-
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
-//        return ResponseEntity.ok("File uploaded successfully. "+ name+" "+ fileName);
     }
+
+
+    @GetMapping("/productsWithImage")
+    public ResponseEntity<List<ProductsDTO>> getAllProductsWithImage() {
+        return ResponseEntity.ok(productsService.findAllWithImage());
+    }
+
 
     @PostMapping("/fileSystem")
     public ResponseEntity<?> uploadImageToFIleSystem(@RequestParam("image") MultipartFile file) throws IOException {

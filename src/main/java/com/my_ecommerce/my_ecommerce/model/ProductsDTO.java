@@ -1,5 +1,6 @@
 package com.my_ecommerce.my_ecommerce.model;
 
+import com.my_ecommerce.my_ecommerce.domain.FileUpload;
 import com.my_ecommerce.my_ecommerce.domain.ProductOption;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -40,5 +41,6 @@ public class ProductsDTO {
 
     private List<Long> fileUploads;
 
+    private Set<FileUploadDTO> fileUploadList;
 
 }

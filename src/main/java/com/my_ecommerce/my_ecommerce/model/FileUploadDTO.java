@@ -28,4 +28,5 @@ public class FileUploadDTO {
 
     private Long products;
 
+    private  byte[] image;
 }
