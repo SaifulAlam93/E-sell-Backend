@@ -69,21 +69,6 @@ public class ProductsService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final ProductsDTO productsDTO) {
-        final Products products = new Products();
-        mapToEntity(productsDTO, products);
-        Long pid = productsRepository.save(products).getId();
-        products.setId(pid);
-        if (productsDTO.getProductOptions()!=null){
-            for (ProductOption p:productsDTO.getProductOptions()
-            ) {
-                p.setProducts(products);
-                productOptionRepository.save(p);
-            }
-        }
-        return pid;
-    }
-
     public void update(final Long id, final ProductsDTO productsDTO) {
         final Products products = productsRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
@@ -132,7 +117,21 @@ public class ProductsService {
 //        products.setFileUploads(fileUploads.stream().collect(Collectors.toSet()));
         return products;
     }
+    public Long create(final ProductsDTO productsDTO) {
+        final Products products = new Products();
+        mapToEntity(productsDTO, products);
+        Long pid = productsRepository.save(products).getId();
 
+        products.setId(pid);
+        if (productsDTO.getProductOptions()!=null){
+            for (ProductOption p:productsDTO.getProductOptions()
+            ) {
+                p.setProducts(products);
+                productOptionRepository.save(p);
+            }
+        }
+        return pid;
+    }
 
 
     public Long createWithFile(final ProductsDTO productsDTO, MultipartFile[] file) {
@@ -172,6 +171,8 @@ public class ProductsService {
         }
         return pid;
     }
+
+
 
     public List<ProductsDTO> findAllWithImage() {
         final List<Products> productss = productsRepository.findAll(Sort.by("id"));

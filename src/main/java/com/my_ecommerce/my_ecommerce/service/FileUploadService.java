@@ -6,19 +6,26 @@ import com.my_ecommerce.my_ecommerce.model.FileUploadDTO;
 import com.my_ecommerce.my_ecommerce.repos.FileUploadRepository;
 import com.my_ecommerce.my_ecommerce.repos.ProductsRepository;
 import com.my_ecommerce.my_ecommerce.util.NotFoundException;
-import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 
 @Service
 public class FileUploadService {
+    private final String FOLDER_PATH = "I://my-ecommerce/Angular/my-ecommerce/src/assets/img/uploadedImage/";
 
     private final FileUploadRepository fileUploadRepository;
     private final ProductsRepository productsRepository;
 
     public FileUploadService(final FileUploadRepository fileUploadRepository,
-            final ProductsRepository productsRepository) {
+                             final ProductsRepository productsRepository) {
         this.fileUploadRepository = fileUploadRepository;
         this.productsRepository = productsRepository;
     }
@@ -74,6 +81,38 @@ public class FileUploadService {
     }
 
 
+    public Set<Long> fileUpload(Long id, MultipartFile[] file) {
+        Optional<Products> product = productsRepository.findById(id);
+        if (product.isPresent()) {
+            Set<Long> fileUploadIDs = new HashSet<>();
+            Set<FileUpload> fileUploads = new HashSet<>();
+//            Set<FileUpload> fileUploads = product.get().getFileUploads()!=null? product.get().getFileUploads():new HashSet<>();
+            try {
+                int index = 0;
+                for (MultipartFile mf : file) {
+                    String filePath = FOLDER_PATH + mf.getOriginalFilename();
 
+                    FileUpload fileUpload = fileUploadRepository.save(
+                            FileUpload.builder()
+                                    .name(mf.getOriginalFilename())
+                                    .type(mf.getContentType())
+                                    .imageNo(index++)
+                                    .imageType("test")
+                                    .url(filePath).build());
 
+                    mf.transferTo(new File(filePath));
+                    if (fileUpload != null) {
+                        fileUploadIDs.add(fileUpload.getId());
+                        fileUploads.add(fileUpload);
+                    }
+                }
+            } catch (Exception e) {
+            }
+            product.get().setFileUploads(fileUploads);
+//            product.get().setFileUploads(mergeSet(fileUploads,product.get().getFileUploads()));
+            productsRepository.save(product.get());
+            return fileUploadIDs;
+        }
+        return  null;
+    }
 }

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -24,13 +25,15 @@ public class ProductsDTO {
     @Size(max = 255)
     private String shortDesc;
 
-    private Integer unitPrice;
+    private BigDecimal unitPrice;
 
-    private Integer unitWeight;
+    private String unitType;
 
-    private Integer totalQuantity;
+    private BigDecimal unitWeight;
 
-    private Integer currentStock;
+    private BigDecimal totalQuantity;
+
+    private BigDecimal currentStock;
 
     @Size(max = 255)
     private String image;

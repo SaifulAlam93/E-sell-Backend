@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Set;
 
@@ -32,16 +33,19 @@ public class Products {
     private String shortDesc;
 
     @Column
-    private Integer unitPrice;
+    private BigDecimal unitPrice;
 
     @Column
-    private Integer unitWeight;
+    private String unitType;
 
     @Column
-    private Integer totalQuantity;
+    private BigDecimal unitWeight;
 
     @Column
-    private Integer currentStock;
+    private BigDecimal totalQuantity;
+
+    @Column
+    private BigDecimal currentStock;
 
     @Column
     private String image;
