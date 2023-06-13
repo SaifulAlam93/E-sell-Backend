@@ -65,7 +65,7 @@ public class Orders {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User01 user01;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

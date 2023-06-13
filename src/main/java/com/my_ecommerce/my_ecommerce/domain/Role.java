@@ -1,38 +1,40 @@
 package com.my_ecommerce.my_ecommerce.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.OffsetDateTime;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import com.my_ecommerce.my_ecommerce.enums.ERole;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "\"role\"")
-@EntityListeners(AuditingEntityListener.class)
-@Getter
-@Setter
+@Table(name = "roles")
 public class Role {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    private String roleName;
+  @Enumerated(EnumType.STRING)
+  @Column(length = 20)
+  private ERole name;
 
-    @Column
-    private String roleDescription;
+  public Role() {
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+  }
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+  public Role(ERole name) {
+    this.name = name;
+  }
 
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public ERole getName() {
+    return name;
+  }
+
+  public void setName(ERole name) {
+    this.name = name;
+  }
 }

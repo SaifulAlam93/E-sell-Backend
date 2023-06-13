@@ -1,64 +1,89 @@
 package com.my_ecommerce.my_ecommerce.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-@Getter
-@Setter
+@Table(name = "users",
+       uniqueConstraints = {
+           @UniqueConstraint(columnNames = "username"),
+           @UniqueConstraint(columnNames = "email")
+       })
 public class User {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    private String userName;
+  @NotBlank
+  @Size(max = 20)
+  private String username;
 
-    @Column
-    private String userFirstName;
+  @NotBlank
+  @Size(max = 50)
+  @Email
+  private String email;
 
-    @Column
-    private String userLastName;
+  @NotBlank
+  @Size(max = 120)
+  private String password;
 
-    @Column
-    private String password;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "user_roles", 
+             joinColumns = @JoinColumn(name = "user_id"),
+             inverseJoinColumns = @JoinColumn(name = "role_id"))
+  private Set<Role> roles = new HashSet<>();
 
-    @Column(nullable = false, unique = true)
-    private String email;
+  public User() {
+  }
 
-    @Column
-    private Boolean enabled;
+  public User(String username, String email, String password) {
+    this.username = username;
+    this.email = email;
+    this.password = password;
+  }
 
-    @Column
-    private Boolean credentialsNonExpired;
+  public Long getId() {
+    return id;
+  }
 
-    @Column
-    private Boolean accountNonExpired;
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    @Column
-    private Boolean accountNonLocked;
+  public String getUsername() {
+    return username;
+  }
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "userrole",
-            joinColumns = @JoinColumn(name = "user_name"),
-            inverseJoinColumns = @JoinColumn(name = "role_name")
-    )
-    private Set<Role> roles;
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+  public String getEmail() {
+    return email;
+  }
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public Set<Role> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
+  }
 }

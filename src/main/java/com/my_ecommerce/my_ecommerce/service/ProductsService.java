@@ -197,7 +197,7 @@ public class ProductsService {
                             byte[] images = Files.readAllBytes(new File(filePath).toPath());
                             FileUploadDTO fileUploadDTO = new FileUploadDTO();
                             mapToDTO(fileData,fileUploadDTO);
-                            fileUploadDTO.setImage(images);
+//                            fileUploadDTO.setImage(images);
                             fileUploadDTOS.add(fileUploadDTO);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
