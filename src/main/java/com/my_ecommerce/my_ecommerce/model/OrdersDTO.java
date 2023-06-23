@@ -1,8 +1,12 @@
 package com.my_ecommerce.my_ecommerce.model;
 
+import com.my_ecommerce.my_ecommerce.domain.OrderDetails;
+import com.my_ecommerce.my_ecommerce.domain.ProductOption;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Set;
 
 
 @Getter
@@ -13,8 +17,18 @@ public class OrdersDTO {
 
     private Integer totalPrice;
 
+    private Integer tax;
+
+    private Integer shipping;
+
     @Size(max = 255)
     private String orderAddress1;
+
+    @Size(max = 255)
+    private String firstName;
+
+    @Size(max = 255)
+    private String lastName;
 
     @Size(max = 255)
     private String orderAddress2;
@@ -39,7 +53,10 @@ public class OrdersDTO {
 
     private Integer totalProductAmount;
 
-    @Size(max = 255)
-    private String user;
+    private Long user;
+
+
+    private Set<OrderDetailsDTO> orderDetails;
+
 
 }

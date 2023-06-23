@@ -12,6 +12,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.OffsetDateTime;
 import java.util.Set;
+
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -60,12 +62,25 @@ public class Orders {
     @Column
     private Integer totalProductAmount;
 
+    @Column
+    private Integer tax;
+
+    @Column
+    private Integer shipping;
+
+
+    @Column
+    private String firstName;
+
+    @Column
+    private String lastName;
+
     @OneToMany(mappedBy = "orders")
     private Set<OrderDetails> orderDetailss;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User01 user01;
+    private User user;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
