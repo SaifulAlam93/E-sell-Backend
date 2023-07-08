@@ -33,12 +33,12 @@ java -Dspring.profiles.active=production -jar ./target/my-ecommerce-0.0.1-SNAPSH
 # E-sell-Backend
 
 
-
 [//]: # (INSERT INTO roles&#40;NAME&#41; VALUES&#40;"ROLE_USER"&#41;;)
 
 [//]: # (INSERT INTO roles&#40;NAME&#41; VALUES&#40;'ROLE_MODERATOR'&#41;;)
 
 [//]: # (INSERT INTO roles&#40;NAME&#41; VALUES&#40;'ROLE_ADMIN'&#41;;)
+
 
 # Gmsaiful71@gmail.com
 

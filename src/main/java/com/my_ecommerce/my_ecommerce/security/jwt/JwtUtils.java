@@ -90,7 +90,7 @@ public class JwtUtils {
     claims.put("roles", new ArrayList<>(user.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.toList())));
-//    claims.put("name", user.getUserFirstName()!=null?user.getUserFirstName():"");
+    claims.put("id", user.getId()!=null?user.getId():0);
 //    claims.put("email", user.getEmail()!=null?user.getEmail():"");
     return Jwts.builder()
             .setClaims(claims)
