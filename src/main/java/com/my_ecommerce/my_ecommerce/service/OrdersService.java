@@ -1,25 +1,27 @@
 package com.my_ecommerce.my_ecommerce.service;
 
-import com.my_ecommerce.my_ecommerce.domain.*;
+import com.my_ecommerce.my_ecommerce.domain.Orders;
+import com.my_ecommerce.my_ecommerce.domain.Role;
+import com.my_ecommerce.my_ecommerce.domain.User;
+import com.my_ecommerce.my_ecommerce.enums.ERole;
 import com.my_ecommerce.my_ecommerce.model.OrderDetailsDTO;
+import com.my_ecommerce.my_ecommerce.model.OrderHistoryDTO;
 import com.my_ecommerce.my_ecommerce.model.OrdersDTO;
-import com.my_ecommerce.my_ecommerce.repos.OrderDetailsRepository;
 import com.my_ecommerce.my_ecommerce.repos.OrdersRepository;
 import com.my_ecommerce.my_ecommerce.repos.UserRepository;
-import com.my_ecommerce.my_ecommerce.repos.UserRepository01;
 import com.my_ecommerce.my_ecommerce.util.NotFoundException;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
 public class OrdersService {
 
     @Autowired
-    private  OrdersRepository ordersRepository;
+    private OrdersRepository ordersRepository;
 
     @Autowired
     private OrderDetailsService orderDetailsService;
@@ -51,8 +53,8 @@ public class OrdersService {
 
         Long orderId = ordersRepository.save(orders).getId();
 
-        if (ordersDTO.getOrderDetails()!=null){
-            for (OrderDetailsDTO ord:ordersDTO.getOrderDetails()
+        if (ordersDTO.getOrderDetails() != null) {
+            for (OrderDetailsDTO ord : ordersDTO.getOrderDetails()
             ) {
                 ord.setOrders(orderId);
                 orderDetailsService.create(ord);
@@ -111,6 +113,52 @@ public class OrdersService {
                 .orElseThrow(() -> new NotFoundException("user01 not found"));
         orders.setUser(user);
         return orders;
+    }
+
+    public List<OrderHistoryDTO> findAllByUser(Long uId) {
+
+        User user = new User();
+        user = userRepository.findById(uId).get();
+
+
+        boolean adminRole = false;
+        boolean moderatorRole = false;
+        boolean userRole = false;
+
+        for (Role r : user.getRoles()
+        ) {
+            if (r.getName()== ERole.ROLE_ADMIN) {
+                adminRole = true;
+            } else if (r.getName()== ERole.ROLE_MODERATOR) {
+                moderatorRole = true;
+            } else {
+                userRole = true;
+            }
+        }
+        final List<Object[]> orders;
+
+        if (adminRole) {
+            orders = ordersRepository.getAll();
+        } else {
+            orders = ordersRepository.getAllByUserId(uId);
+        }
+        System.out.println(orders.size());
+        System.out.println("-------------");
+        return orders.stream()
+                .map((order) -> mapToHistoryDTO(order, new OrderHistoryDTO()))
+                .toList();
+    }
+
+    private OrderHistoryDTO mapToHistoryDTO(final Object[] orders, final OrderHistoryDTO ordersDTO) {
+        ordersDTO.setOrder_id((Long) orders[0]);
+        ordersDTO.setProductName((String) orders[1]);
+        ordersDTO.setCategoryName((String) orders[2]);
+        ordersDTO.setLastUpdated(orders[5].toString());
+        ordersDTO.setQuantity((Double) orders[3]);
+        ordersDTO.setPrice((Double) orders[4]);
+//        ordersDTO.setUserName((String) orders[6]);
+        ordersDTO.setUserName(orders[6] == null ? "" : (String) orders[6]);
+        return ordersDTO;
     }
 
 }

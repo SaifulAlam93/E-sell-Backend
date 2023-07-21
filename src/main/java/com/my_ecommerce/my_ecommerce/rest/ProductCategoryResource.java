@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(value = "/api/productCategorys", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://192.168.2.220:4200", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class ProductCategoryResource {
 
     private final ProductCategoryService productCategoryService;

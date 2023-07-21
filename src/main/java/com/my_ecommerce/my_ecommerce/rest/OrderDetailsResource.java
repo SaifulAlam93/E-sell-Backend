@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/orderDetailss", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://192.168.2.220:4200", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class OrderDetailsResource {
 
     private final OrderDetailsService orderDetailsService;

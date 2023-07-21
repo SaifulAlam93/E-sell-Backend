@@ -1,5 +1,6 @@
 package com.my_ecommerce.my_ecommerce.rest;
 
+import com.my_ecommerce.my_ecommerce.model.OrderHistoryDTO;
 import com.my_ecommerce.my_ecommerce.model.OrdersDTO;
 import com.my_ecommerce.my_ecommerce.service.OrdersService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/orderss", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://192.168.2.220:4200", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true", allowedHeaders = "*")
 public class OrdersResource {
 
     @Autowired
@@ -53,4 +54,10 @@ public class OrdersResource {
         return ResponseEntity.noContent().build();
     }
 
+
+
+    @GetMapping("/orderList/{id}")
+    public ResponseEntity<List<OrderHistoryDTO>> getOrderListWithDetail(@PathVariable(name = "id") final Long uId) {
+        return ResponseEntity.ok(ordersService.findAllByUser(uId));
+    }
 }
