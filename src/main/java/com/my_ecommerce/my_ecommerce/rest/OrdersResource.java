@@ -57,7 +57,7 @@ public class OrdersResource {
 
 
     @GetMapping("/orderList/{id}")
-    public ResponseEntity<List<OrderHistoryDTO>> getOrderListWithDetail(@PathVariable(name = "id") final Long uId) {
+    public ResponseEntity<List<OrderHistoryDTO>> getOrderListWithDetail(@PathVariable(name = "id") final String uId) {
         return ResponseEntity.ok(ordersService.findAllByUser(uId));
     }
 }

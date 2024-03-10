@@ -1,16 +1,15 @@
 package com.my_ecommerce.my_ecommerce.rest;
 
 
+import com.my_ecommerce.my_ecommerce.domain.Role01;
+import com.my_ecommerce.my_ecommerce.domain.User01;
 import com.my_ecommerce.my_ecommerce.enums.ERole;
-import com.my_ecommerce.my_ecommerce.domain.Role;
-import com.my_ecommerce.my_ecommerce.domain.User;
 import com.my_ecommerce.my_ecommerce.model.JwtResponse;
 import com.my_ecommerce.my_ecommerce.payload.request.LoginRequest;
 import com.my_ecommerce.my_ecommerce.payload.request.SignupRequest;
 import com.my_ecommerce.my_ecommerce.payload.response.MessageResponse;
-import com.my_ecommerce.my_ecommerce.payload.response.UserInfoResponse;
-import com.my_ecommerce.my_ecommerce.repos.RoleRepository;
-import com.my_ecommerce.my_ecommerce.repos.UserRepository;
+import com.my_ecommerce.my_ecommerce.repos.RoleRepository01;
+import com.my_ecommerce.my_ecommerce.repos.UserRepository01;
 import com.my_ecommerce.my_ecommerce.security.jwt.JwtUtils;
 import com.my_ecommerce.my_ecommerce.security.services.UserDetailsImpl;
 import jakarta.validation.Valid;
@@ -26,9 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 //for Angular Client (withCredentials)
@@ -40,10 +37,10 @@ public class AuthController {
   AuthenticationManager authenticationManager;
 
   @Autowired
-  UserRepository userRepository;
+  UserRepository01 userRepository;
 
   @Autowired
-  RoleRepository roleRepository;
+  RoleRepository01 roleRepository;
 
   @Autowired
   PasswordEncoder encoder;
@@ -83,7 +80,7 @@ public class AuthController {
 
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+    if (userRepository.existsByUserName(signUpRequest.getUsername())) {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
     }
 
@@ -92,41 +89,41 @@ public class AuthController {
     }
 
     // Create new user's account
-    User user = new User(signUpRequest.getUsername(),
+    User01 user = new User01(signUpRequest.getUsername(),
                          signUpRequest.getEmail(),
                          encoder.encode(signUpRequest.getPassword()));
 
     Set<String> strRoles = signUpRequest.getRole();
-    Set<Role> roles = new HashSet<>();
+    Set<Role01> roles = new HashSet<>();
 
     if (strRoles == null) {
-      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+      Role01 userRole = roleRepository.findById(ERole.ROLE_USER.toString())
+          .orElseThrow(() -> new RuntimeException("Error: Role01 is not found."));
       roles.add(userRole);
     } else {
       strRoles.forEach(role -> {
         switch (role) {
         case "admin":
-          Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+          Role01 adminRole = roleRepository.findById(ERole.ROLE_ADMIN.toString())
+              .orElseThrow(() -> new RuntimeException("Error: Role01 is not found."));
           roles.add(adminRole);
 
           break;
         case "mod":
-          Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+          Role01 modRole = roleRepository.findById(ERole.ROLE_MODERATOR.toString())
+              .orElseThrow(() -> new RuntimeException("Error: Role01 is not found."));
           roles.add(modRole);
 
           break;
         default:
-          Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+          Role01 userRole = roleRepository.findById(ERole.ROLE_USER.toString())
+              .orElseThrow(() -> new RuntimeException("Error: Role01 is not found."));
           roles.add(userRole);
         }
       });
     }
 
-    user.setRoles(roles);
+    user.setRole01s(roles);
     userRepository.save(user);
 
     return ResponseEntity.ok(new MessageResponse("User01 registered successfully!"));

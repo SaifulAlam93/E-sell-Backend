@@ -61,5 +61,11 @@ public class User01 {
     @Column(nullable = false)
     private OffsetDateTime lastUpdated;
 
-
+    public User01(String userName, String email, String password) {
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+    }
+    public User01() {
+    }
 }

@@ -13,23 +13,23 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
 
 
-    @Query(value = " SELECT o.id,p.product_name, pc.category_name, od.quantity, od.price, od.last_updated, u.username  FROM order_details od\n" +
+    @Query(value = " SELECT o.id,p.product_name, pc.category_name, od.quantity, od.price, od.last_updated, u.user_name  FROM order_details od\n" +
             " LEFT JOIN `orders` o ON od.orders_id = o.id\n" +
             " LEFT JOIN `products` p ON od.products_id = p.id\n" +
             " LEFT JOIN `product_category` pc ON p.product_category_id = pc.id " +
-            " LEFT JOIN  users u ON o.user_id = u.id\n "+
+            " LEFT JOIN  User01 u ON o.user_id = u.user_name\n "+
             " WHERE o.user_id = :uId \n" +
             " ORDER BY od.last_updated DESC ", nativeQuery = true)
 
-    List<Object[]> getAllByUserId(@Param("uId") Long uId);
+    List<Object[]> getAllByUserId(@Param("uId") String uId);
 
 
 
-    @Query(value = " SELECT o.id,p.product_name, pc.category_name, od.quantity, od.price, od.last_updated, u.username FROM order_details od\n" +
+    @Query(value = " SELECT o.id,p.product_name, pc.category_name, od.quantity, od.price, od.last_updated, u.user_name FROM order_details od\n" +
             " LEFT JOIN `orders` o ON od.orders_id = o.id\n" +
             " LEFT JOIN `products` p ON od.products_id = p.id\n" +
             " LEFT JOIN `product_category` pc ON p.product_category_id = pc.id " +
-            " LEFT JOIN  users u ON o.user_id = u.id\n "+
+            " LEFT JOIN  User01 u ON o.user_id = u.user_name\n "+
             " ORDER BY od.last_updated DESC ", nativeQuery = true)
 
     List<Object[]> getAll();
