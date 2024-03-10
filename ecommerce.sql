@@ -107,42 +107,13 @@ CREATE TABLE `order_details` (
   KEY `FK2h8sqod2uhp3381vnr8f9unyj` (`products_id`),
   CONSTRAINT `FK2h8sqod2uhp3381vnr8f9unyj` FOREIGN KEY (`products_id`) REFERENCES `products` (`id`),
   CONSTRAINT `FKint27bl8qoql1ksaw8ik7cq95` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `order_details` */
 
 insert  into `order_details`(`id`,`date_created`,`last_updated`,`price`,`quantity`,`orders_id`,`products_id`) values 
-(16,'2023-07-07 06:07:36','2023-07-07 06:07:36',500,1,7,2),
-(17,'2023-07-07 06:07:36','2023-07-07 06:07:36',100,1,7,1),
-(18,'2023-07-07 06:07:36','2023-07-07 06:07:36',3000,1,7,3),
-(19,'2023-07-07 06:17:24','2023-07-07 06:17:24',2000,1,8,1),
-(20,'2023-07-07 06:17:24','2023-07-07 06:17:24',1000,1,8,3),
-(21,'2023-07-07 06:17:24','2023-07-07 06:17:24',5000,1,8,2),
-(22,'2023-07-21 03:34:24','2023-07-21 03:34:24',NULL,1,9,1),
-(23,'2023-07-21 03:34:24','2023-07-21 03:34:24',NULL,1,9,2),
-(24,'2023-07-21 03:34:24','2023-07-21 03:34:24',NULL,1,9,3),
-(25,'2023-07-21 03:39:38','2023-07-21 03:39:38',NULL,1,10,3),
-(26,'2023-07-21 03:39:39','2023-07-21 03:39:39',NULL,1,10,1),
-(27,'2023-07-21 03:39:39','2023-07-21 03:39:39',NULL,1,10,2),
-(28,'2023-07-21 03:40:24','2023-07-21 03:40:24',NULL,1,11,2),
-(29,'2023-07-21 03:40:24','2023-07-21 03:40:24',NULL,1,11,3),
-(30,'2023-07-21 03:40:24','2023-07-21 03:40:24',NULL,1,11,1),
-(31,'2023-07-21 03:51:22','2023-07-21 03:51:22',NULL,1,12,2),
-(32,'2023-07-21 03:51:22','2023-07-21 03:51:22',NULL,1,12,3),
-(33,'2023-07-21 03:51:22','2023-07-21 03:51:22',NULL,1,12,1),
-(34,'2023-07-21 03:55:46','2023-07-21 03:55:46',NULL,1,13,1),
-(35,'2023-07-21 03:55:46','2023-07-21 03:55:46',NULL,1,13,3),
-(36,'2023-07-21 03:55:46','2023-07-21 03:55:46',NULL,1,13,2),
-(37,'2023-07-21 05:44:03','2023-07-21 05:44:03',NULL,3,14,5),
-(38,'2023-07-21 05:44:03','2023-07-21 05:44:03',NULL,3,14,4),
-(39,'2023-07-21 05:52:16','2023-07-21 05:52:16',NULL,5,15,5),
-(40,'2023-07-21 05:52:16','2023-07-21 05:52:16',NULL,4,15,4),
-(41,'2023-07-21 05:53:46','2023-07-21 05:53:46',NULL,5,16,5),
-(42,'2023-07-21 05:53:47','2023-07-21 05:53:47',NULL,4,16,4),
-(43,'2023-07-21 05:57:02','2023-07-21 05:57:02',900,1,17,4),
-(44,'2023-07-21 05:57:02','2023-07-21 05:57:02',900,1,17,6),
-(45,'2023-07-21 05:57:02','2023-07-21 05:57:02',NULL,6,17,5),
-(46,'2023-07-21 05:57:02','2023-07-21 05:57:02',400,1,17,1);
+(1,'2024-03-10 06:41:02','2024-03-10 06:41:02',900,1,1,5),
+(2,'2024-03-10 06:41:02','2024-03-10 06:41:02',900,1,1,4);
 
 /*Table structure for table `orders` */
 
@@ -152,42 +123,30 @@ CREATE TABLE `orders` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `date_created` datetime NOT NULL,
   `email` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
   `house_no` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
   `last_updated` datetime NOT NULL,
   `order_address1` varchar(255) DEFAULT NULL,
   `order_address2` varchar(255) DEFAULT NULL,
   `order_city` varchar(255) DEFAULT NULL,
   `order_state` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
+  `shipping` int(11) DEFAULT NULL,
+  `tax` int(11) DEFAULT NULL,
   `total_price` int(11) DEFAULT NULL,
   `total_product_amount` int(11) DEFAULT NULL,
   `zip` varchar(255) DEFAULT NULL,
-  `user_id` bigint(20) DEFAULT NULL,
-  `shipping` int(11) DEFAULT NULL,
-  `tax` int(11) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
+  `user_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
-  CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+  KEY `FKge89vdw8aj1myh6ax2ys6vmbm` (`user_id`),
+  CONSTRAINT `FKge89vdw8aj1myh6ax2ys6vmbm` FOREIGN KEY (`user_id`) REFERENCES `user01` (`user_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `orders` */
 
-insert  into `orders`(`id`,`date_created`,`email`,`house_no`,`last_updated`,`order_address1`,`order_address2`,`order_city`,`order_state`,`phone`,`total_price`,`total_product_amount`,`zip`,`user_id`,`shipping`,`tax`,`first_name`,`last_name`) values 
-(5,'2023-07-07 05:57:47','gmsaiful71@gmail.com','','2023-07-07 05:57:47','','','Dhaka','','01712922516',4600,5,'1230',4,400,200,'gmsaiful71@gmail.com','gmsaiful71@gmail.com'),
-(6,'2023-07-07 06:03:24','','','2023-07-07 06:03:24','','','','','',5635,5,'',4,490,245,'',''),
-(7,'2023-07-07 06:07:36','gmsaiful71@gmail.com','','2023-07-07 06:07:36','','','Dhaka','','01712922516',2530,3,'1230',4,220,110,'gmsaiful71@gmail.com','gmsaiful71@gmail.com'),
-(8,'2023-07-07 06:17:24','','','2023-07-07 06:17:24','','','','','',2530,3,'',4,220,110,'',''),
-(9,'2023-07-21 03:34:24','gmsaiful71@gmail.com','','2023-07-21 03:34:24','','','Dhaka','','01712922516',2530,3,'1230',4,220,110,'gmsaiful71@gmail.com','gmsaiful71@gmail.com'),
-(10,'2023-07-21 03:39:38','gmsaiful71@gmail.com','','2023-07-21 03:39:38','','','Dhaka','','01712922516',2530,3,'1230',4,220,110,'gmsaiful71@gmail.com','gmsaiful71@gmail.com'),
-(11,'2023-07-21 03:40:24','gmsaiful71@gmail.com','','2023-07-21 03:40:24','','','Dhaka','','01712922516',2530,3,'1230',4,220,110,'gmsaiful71@gmail.com','gmsaiful71@gmail.com'),
-(12,'2023-07-21 03:51:22','gmsaiful71@gmail.com','','2023-07-21 03:51:22','','','Dhaka','','01712922516',2530,3,'1230',4,220,110,'gmsaiful71@gmail.com','gmsaiful71@gmail.com'),
-(13,'2023-07-21 03:55:46','','','2023-07-21 03:55:46','','','','','',2530,3,'',4,220,110,'',''),
-(14,'2023-07-21 05:44:02','gmsaiful71@gmail.com','','2023-07-21 05:44:02','gmsaiful71@gmail.com','Dhaka','Dhaka','','01712922516',6210,2,'1230',4,540,270,'gmsaiful71@gmail.com','gmsaiful71@gmail.com'),
-(15,'2023-07-21 05:52:16','gmsaiful71@gmail.com','','2023-07-21 05:52:16','','','Dhaka','','01712922516',9315,2,'1230',4,810,405,'gmsaiful71@gmail.com','gmsaiful71@gmail.com'),
-(16,'2023-07-21 05:53:46','gmsaiful71@gmail.com','','2023-07-21 05:53:46','','','Dhaka','','01712922516',9315,2,'1230',4,810,405,'gmsaiful71@gmail.com','gmsaiful71@gmail.com'),
-(17,'2023-07-21 05:57:02','gmsaiful71@gmail.com','','2023-07-21 05:57:02','','','Dhaka','','01712922516',8740,4,'1230',4,760,380,'gmsaiful71@gmail.com','gmsaiful71@gmail.com');
+insert  into `orders`(`id`,`date_created`,`email`,`first_name`,`house_no`,`last_name`,`last_updated`,`order_address1`,`order_address2`,`order_city`,`order_state`,`phone`,`shipping`,`tax`,`total_price`,`total_product_amount`,`zip`,`user_id`) values 
+(1,'2024-03-10 06:41:02','gmsifulalam93@gmail.com','gmsifulalam93@gmail.com','fgfg','gmsifulalam93@gmail.com','2024-03-10 06:41:02','gmsifulalam93@gmail.com','Dhaka','Dhaka.','','+8801712922516',180,90,2070,2,'1230','aaa');
 
 /*Table structure for table `product_category` */
 
@@ -359,7 +318,9 @@ CREATE TABLE `user01` (
 /*Data for the table `user01` */
 
 insert  into `user01`(`user_name`,`account_non_expired`,`account_non_locked`,`credentials_non_expired`,`date_created`,`email`,`enabled`,`last_updated`,`password`,`user_first_name`,`user_last_name`) values 
-('aaa',NULL,NULL,NULL,'2024-03-10 04:10:25','aaa@gmail.com',NULL,'2024-03-10 04:10:25','$2a$10$.7FDYG9QErsxUFMjKmscD.7xMyUdhPQJj3ouJRh.OSaVSJ1CeY0Yq',NULL,NULL);
+('aaa',NULL,NULL,NULL,'2024-03-10 04:10:25','aaa@gmail.com',NULL,'2024-03-10 04:10:25','$2a$10$.7FDYG9QErsxUFMjKmscD.7xMyUdhPQJj3ouJRh.OSaVSJ1CeY0Yq',NULL,NULL),
+('admin',NULL,NULL,NULL,'2024-03-10 06:44:34','admin@gmail.com',NULL,'2024-03-10 06:44:34','$2a$10$O6JeBw9QWWIk59B6KBW.ReiKb4avRKTjv0QWlChFgtg0vNy1mmTHa',NULL,NULL),
+('admin123',NULL,NULL,NULL,'2024-03-10 06:46:23','admin123@gmail.com',NULL,'2024-03-10 06:46:23','$2a$10$ASJNRb33JejIUEeoI71TpeWTGa4Aw4gZXo0rkovhSjoYY7e8qUgvu',NULL,NULL);
 
 /*Table structure for table `user_roles` */
 
@@ -392,7 +353,9 @@ CREATE TABLE `userrole` (
 /*Data for the table `userrole` */
 
 insert  into `userrole`(`user_name`,`role_name`) values 
-('aaa','ROLE_USER');
+('aaa','ROLE_USER'),
+('admin','ROLE_ADMIN'),
+('admin123','ROLE_MODERATOR');
 
 /*Table structure for table `users` */
 

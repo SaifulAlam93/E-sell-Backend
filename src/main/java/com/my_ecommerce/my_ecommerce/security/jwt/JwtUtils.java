@@ -91,6 +91,7 @@ public class JwtUtils {
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.toList())));
     claims.put("id", user.getId()!=null?user.getId():0);
+    claims.put("user_name", user.getUsername()!=null?user.getUsername():"0");
 //    claims.put("email", user.getEmail()!=null?user.getEmail():"");
     return Jwts.builder()
             .setClaims(claims)
