@@ -1,14 +1,14 @@
 package com.my_ecommerce.my_ecommerce.service;
 
 import com.my_ecommerce.my_ecommerce.domain.Orders;
-import com.my_ecommerce.my_ecommerce.domain.Role;
-import com.my_ecommerce.my_ecommerce.domain.User;
+import com.my_ecommerce.my_ecommerce.domain.Role01;
+import com.my_ecommerce.my_ecommerce.domain.User01;
 import com.my_ecommerce.my_ecommerce.enums.ERole;
 import com.my_ecommerce.my_ecommerce.model.OrderDetailsDTO;
 import com.my_ecommerce.my_ecommerce.model.OrderHistoryDTO;
 import com.my_ecommerce.my_ecommerce.model.OrdersDTO;
 import com.my_ecommerce.my_ecommerce.repos.OrdersRepository;
-import com.my_ecommerce.my_ecommerce.repos.UserRepository;
+import com.my_ecommerce.my_ecommerce.repos.UserRepository01;
 import com.my_ecommerce.my_ecommerce.util.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -26,7 +26,7 @@ public class OrdersService {
     @Autowired
     private OrderDetailsService orderDetailsService;
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository01 userRepository;
 
 //    public OrdersService(final OrdersRepository ordersRepository,
 //            final UserRepository01 userRepository01) {
@@ -90,7 +90,7 @@ public class OrdersService {
         ordersDTO.setPhone(orders.getPhone());
         ordersDTO.setEmail(orders.getEmail());
         ordersDTO.setTotalProductAmount(orders.getTotalProductAmount());
-        ordersDTO.setUser(orders.getUser() == null ? null : orders.getUser().getId());
+        ordersDTO.setUser(orders.getUser() == null ? null : orders.getUser().getUserName());
         return ordersDTO;
     }
 
@@ -109,15 +109,15 @@ public class OrdersService {
         orders.setPhone(ordersDTO.getPhone());
         orders.setEmail(ordersDTO.getEmail());
         orders.setTotalProductAmount(ordersDTO.getTotalProductAmount());
-        final User user = ordersDTO.getUser() == null ? null : userRepository.findById(ordersDTO.getUser())
+        final User01 user = ordersDTO.getUser() == null ? null : userRepository.findById(ordersDTO.getUser())
                 .orElseThrow(() -> new NotFoundException("user01 not found"));
         orders.setUser(user);
         return orders;
     }
 
-    public List<OrderHistoryDTO> findAllByUser(Long uId) {
+    public List<OrderHistoryDTO> findAllByUser(String uId) {
 
-        User user = new User();
+        User01 user = new User01();
         user = userRepository.findById(uId).get();
 
 
@@ -125,11 +125,11 @@ public class OrdersService {
         boolean moderatorRole = false;
         boolean userRole = false;
 
-        for (Role r : user.getRoles()
+        for (Role01 r : user.getRole01s()
         ) {
-            if (r.getName()== ERole.ROLE_ADMIN) {
+            if (r.getRoleName()== ERole.ROLE_ADMIN.toString()) {
                 adminRole = true;
-            } else if (r.getName()== ERole.ROLE_MODERATOR) {
+            } else if (r.getRoleName()== ERole.ROLE_MODERATOR.toString()) {
                 moderatorRole = true;
             } else {
                 userRole = true;

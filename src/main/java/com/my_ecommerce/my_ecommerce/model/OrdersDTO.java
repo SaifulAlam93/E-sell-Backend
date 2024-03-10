@@ -53,7 +53,7 @@ public class OrdersDTO {
 
     private Integer totalProductAmount;
 
-    private Long user;
+    private String user;
 
 
     private Set<OrderDetailsDTO> orderDetails;

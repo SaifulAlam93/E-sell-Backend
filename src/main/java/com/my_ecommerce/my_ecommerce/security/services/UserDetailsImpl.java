@@ -1,7 +1,7 @@
 package com.my_ecommerce.my_ecommerce.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.my_ecommerce.my_ecommerce.domain.User;
+import com.my_ecommerce.my_ecommerce.domain.User01;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,23 +25,21 @@ public class UserDetailsImpl implements UserDetails {
 
   private Collection<? extends GrantedAuthority> authorities;
 
-  public UserDetailsImpl(Long id, String username, String email, String password,
-      Collection<? extends GrantedAuthority> authorities) {
-    this.id = id;
+  public UserDetailsImpl(String username, String email, String password,
+                         Collection<? extends GrantedAuthority> authorities) {
     this.username = username;
     this.email = email;
     this.password = password;
     this.authorities = authorities;
   }
 
-  public static UserDetailsImpl build(User user) {
-    List<GrantedAuthority> authorities = user.getRoles().stream()
-        .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+  public static UserDetailsImpl build(User01 user) {
+    List<GrantedAuthority> authorities = user.getRole01s().stream()
+        .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
         .collect(Collectors.toList());
 
     return new UserDetailsImpl(
-        user.getId(), 
-        user.getUsername(), 
+        user.getUserName(),
         user.getEmail(),
         user.getPassword(), 
         authorities);

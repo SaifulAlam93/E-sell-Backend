@@ -80,7 +80,7 @@ public class Orders {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User01 user;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

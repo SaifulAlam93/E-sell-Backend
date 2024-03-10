@@ -1,13 +1,13 @@
 package com.my_ecommerce.my_ecommerce.model;
 
-import com.my_ecommerce.my_ecommerce.domain.User;
+import com.my_ecommerce.my_ecommerce.domain.User01;
 
 public class JwtResponse {
 
-    private User user;
+    private User01 user;
     private String jwtToken;
 
-    public JwtResponse(User user, String jwtToken) {
+    public JwtResponse(User01 user, String jwtToken) {
         this.user = user;
         this.jwtToken = jwtToken;
     }
@@ -16,11 +16,11 @@ public class JwtResponse {
         this.jwtToken = jwtToken;
     }
 
-    public User getUser() {
+    public User01 getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(User01 user) {
         this.user = user;
     }
 
